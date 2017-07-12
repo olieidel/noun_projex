@@ -17,7 +17,7 @@ defmodule NounProjex.Mixfile do
   end
 
   def application do
-    []
+    [applications: [:httpoison]]
   end
 
   defp deps do
