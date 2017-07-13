@@ -1,18 +1,31 @@
 # NounProjex
 
-**TODO: Add description**
+Elixir client for the [Noun Project][noun_project] API.
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `noun_projex` to your list of dependencies in `mix.exs`:
-
 ```elixir
 def deps do
-  [{:noun_projex, "~> 0.1.0"}]
+  [{:noun_projex, "~> 0.1"}]
 end
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/noun_projex](https://hexdocs.pm/noun_projex).
+## Usage
+
+Every Noun Project API endpoint has a very similarly named
+function. Check the [API docs][noun_project_api_docs] and the NounProjex Docs.
+
+Query parameters are passed as a keyword list.
+
+## Examples
+
+``` elixir
+iex(1)> NounProjex.get_collection(123)
+# ...
+
+iex(2)> NounProjex.get_collection_icons(123, limit: 20, offset: 10)
+# ...
+```
+
+[noun_project]: https://thenounproject.com
+[noun_project_api_docs]: http://api.thenounproject.com/documentation.html
