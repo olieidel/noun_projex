@@ -9,7 +9,10 @@ defmodule NounProjex.Mixfile do
      start_permanent: Mix.env == :prod,
      deps: deps(),
 
-     # Docs
+     # hex.pm and docs
+     description: description(),
+     package: package(),
+
      name: "NounProjex",
      source_url: "https://github.com/olieidel/noun_projex",
      docs: [main: "NounProjex",
@@ -35,8 +38,6 @@ defmodule NounProjex.Mixfile do
 
   defp package do
     [
-      name: :noun_projex,
-      files: ["lib", "mix.exs", "README.md", "LICENSE"],
       maintainers: ["Oliver Eidel"],
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/olieidel/noun_projex"}
