@@ -6,7 +6,6 @@ defmodule NounProjex do
   @base_url "http://api.thenounproject.com"
   @consumer_key Application.get_env(:noun_projex, :api_key)
   @consumer_secret Application.get_env(:noun_projex, :api_secret)
-  @default_limit 50
 
   @doc """
   Returns a single collection by id (int).
@@ -22,17 +21,13 @@ defmodule NounProjex do
     do_request(:get, ["collection", slug])
   end
 
-
   def get_collection_icons(id_or_slug, params \\ [])
 
   @doc """
   Returns a list of icons associated with a collection by id (int).
   """
   def get_collection_icons(id, params) when is_integer(id) do
-    params = construct_params_with_defaults(params,
-      [{:limit, @default_limit},
-       {:offset, 0},
-       {:page, 0}])
+    params = filter_params(params, [:limit, :offset, :page])
 
     do_request(:get, ["collection", to_string(id), "icons"], params)
   end
@@ -41,10 +36,7 @@ defmodule NounProjex do
   Returns a list of icons associated with a collection by slug (string).
   """
   def get_collection_icons(slug, params) when is_binary(slug) do
-    params = construct_params_with_defaults(params,
-      [{:limit, @default_limit},
-       {:offset, 0},
-       {:page, 0}])
+    params = filter_params(params, [:limit, :offset, :page])
 
     do_request(:get, ["collection", slug, "icons"], params)
   end
@@ -53,10 +45,7 @@ defmodule NounProjex do
   Returns a list of all collections.
   """
   def get_collections(params \\ []) do
-    params = construct_params_with_defaults(params,
-      [{:limit, @default_limit},
-       {:offset, 0},
-       {:page, 0}])
+    params = filter_params(params, [:limit, :offset, :page])
 
     do_request(:get, "collections", params)
   end
@@ -79,11 +68,8 @@ defmodule NounProjex do
   Returns a list of icons by term (string).
   """
   def get_icons(term, params \\ []) when is_binary(term) do
-    params = construct_params_with_defaults(params,
-      [{:limit_to_public_domain, 0},
-       {:limit, @default_limit},
-       {:offset, 0},
-       {:page, 0}])
+    params = filter_params(params,
+      [:limit_to_public_domain, :limit, :offset, :page])
 
     do_request(:get, ["icons", term], params)
   end
@@ -92,10 +78,7 @@ defmodule NounProjex do
   Returns list of most recently uploaded icons.
   """
   def get_icons_recent_uploads(params \\ []) do
-    params = construct_params_with_defaults(params,
-      [{:limit, @default_limit},
-       {:offset, 0},
-       {:page, 0}])
+    params = filter_params(params, [:limit, :offset, :page])
 
     do_request(:get, ["icons", "recent_uploads"], params)
   end
@@ -127,10 +110,7 @@ defmodule NounProjex do
   Returns a list of uploads associated with a user by username (string).
   """
   def get_user_uploads(username, params \\ []) when is_binary(username) do
-    params = construct_params_with_defaults(params,
-      [{:limit, @default_limit},
-       {:offset, 0},
-       {:page, 0}])
+    params = filter_params(params, [:limit, :offset, :page])
 
     do_request(:get, ["user", username, "uploads"], params)
   end
@@ -162,14 +142,9 @@ defmodule NounProjex do
     end
   end
 
-  @doc """
-  Construct path params from a list of tuples with each entry having
-  {:param_name, default_value}
-  """
-  def construct_params_with_defaults(params, params_list) do
-    Enum.map(params_list, fn {param_name, default_value} ->
-      value = Keyword.get(params, param_name, default_value)
-      {to_string(param_name), to_string(value)}
+  defp filter_params(params, params_list) do
+    Enum.filter(params, fn {key, _value} ->
+      key in params_list
     end)
   end
 
